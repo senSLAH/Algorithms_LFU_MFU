@@ -1,6 +1,7 @@
 #ifndef SO_ALGORITHMS_H
 #define SO_ALGORITHMS_H
-#include "vector"
+#include <vector>
+#include <deque>
 #include "File_operation.h"
 
 enum State : int {MENU = 0 , LFU = 1, MFU, WRITE ,STOP};
@@ -15,7 +16,7 @@ struct frequency
 class Algorithms
 {
     std::vector<frequency> freq;
-    std::vector<std::vector<int>> table;
+    std::vector<std::deque<int>> table;
     int number_of_frames;
     int reference_string_length;
     int hit;
@@ -24,7 +25,7 @@ class Algorithms
 public:
     Algorithms();
     void run_algorithm(State algorithm_type, Data_option option);
-    void LFU_algorithm(std::vector<Page> &arr_of_pages);
+    void LRU_algorithm(std::vector<Page> &arr_of_pages);
     void check_frequency(int num);
     void FCFS_algorithm_two_measures(std::vector<std::vector<Page>> &arr_of_proces);
     void SJF_algorith(std::vector<Page> &arr_of_proces);

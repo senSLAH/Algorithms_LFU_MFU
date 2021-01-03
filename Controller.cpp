@@ -49,7 +49,7 @@ void Controller::draw()
 
     if (current_state == LFU && data_option == FROM_FILE)
     {
-        algorithms.LFU_algorithm(file.get_data_storage());
+        algorithms.LRU_algorithm(file.get_data_storage());
         current_state = WRITE;
     }
 //        if (temp == 2 && current_state == SJF && data_option == FROM_FILE)
