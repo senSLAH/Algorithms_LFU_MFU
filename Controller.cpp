@@ -20,8 +20,8 @@ void Controller::draw()
     {
         temp = 0;
         std::cout << "\nAlgoritms:\n";
-        std::cout << "1) LFU\n";
-        std::cout << "2) MFU\n";
+        std::cout << "1) LRU\n";
+        std::cout << "2) LFU\n";
         std::cout << "\nYour choice:\n";
 
         std::cin >> temp;
@@ -34,7 +34,7 @@ void Controller::draw()
             std::cout << "Plese chose 1 or 2";
     }
 
-    if ((current_state == LFU || current_state == MFU) && data_option == NOT_CHOSEN)
+    if ((current_state == LRU || current_state == LFU) && data_option == NOT_CHOSEN)
     {
         temp = 0;
         std::cout << "\n1) Use data from file\n";
@@ -47,22 +47,22 @@ void Controller::draw()
     }
 
 
-    if (current_state == LFU && data_option == FROM_FILE)
+    if (current_state == LRU && data_option == FROM_FILE)
     {
         algorithms.LRU_algorithm(file.get_data_storage());
         current_state = WRITE;
     }
-//        if (temp == 2 && current_state == SJF && data_option == FROM_FILE)
-//        {
-//            algorithms.SJF_algorith(file.get_data_storage());
-//            current_state = WRITE;
-//        }
-//        if (current_state == WRITE && data_option == FROM_FILE)
-//        {
-//            // функция для записи в файл результатов
-//            file.write_to_file(algorithms.get_results());
-//            current_state = STOP;
-//        }
+    if (current_state == LFU && data_option == FROM_FILE)
+    {
+        algorithms.LFU_algorithm(file.get_data_storage());
+        current_state = WRITE;
+    }
+    if (current_state == WRITE && data_option == FROM_FILE)
+    {
+        // функция для записи в файл результатов
+        file.write_results(algorithms.get_results());
+        current_state = STOP;
+    }
 //        if (current_state == WRITE && data_option == _100_sets_of_100_elements)
 //        {
 //            // функция для записи в файл результатов

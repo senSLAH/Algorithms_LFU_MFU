@@ -66,14 +66,23 @@ void File_operation::read_file()
     }
 }
 
+std::vector<Page> &File_operation::get_data_storage()
+{
+    return data_storage;
+}
+
+void File_operation::write_results(std::vector<results_data> &results)
+{
+    for (int i = 0; i < results.size(); ++i)
+    {
+        output_file << "Hit: " << results[i].hit;
+        output_file << "\nFault: " << results[i].fault << "\n";
+    }
+}
+
 File_operation::~File_operation()
 {
     input_file.close();
     output_file.close();
     std::cout << "Files successfully closed!\n";
-}
-
-std::vector<Page> &File_operation::get_data_storage()
-{
-    return data_storage;
 }
