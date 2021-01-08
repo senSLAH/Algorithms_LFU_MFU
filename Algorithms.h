@@ -13,13 +13,11 @@ struct frequency
     int repetitions;
 };
 
-
-
 class Algorithms
 {
-    std::deque<frequency> freq;
+    std::deque<frequency> freq;//struktura danych która pamęta ile razy każdą ze stron użyli
     std::vector<std::deque<int>> table;
-    std::vector<results_data> results;
+    std::vector<results_data> results;//struktura do której będziemy wpisyłacz wynniki algorytmów i zatem z niej będziemy zapisyłacz danne do pliku
     int number_of_frames;
     int reference_string_length;
     int hit;
@@ -30,8 +28,8 @@ public:
     void run_algorithm(State algorithm_type, Data_option option);
     void LFU_algorithm(std::vector<Page> &arr_of_pages);
     void LRU_algorithm(std::vector<Page> &arr_of_pages);
-    void check_frequency(int num, std::string option = "Pass");
-    int delete_element_func(int option = 0);         //if option = 1 function will clear frequency
+    void check_frequency(int num);
+    int minimal_freq(int option = 0);         //if option = 1 function will clear frequency
     void show_results();
     std::vector<results_data>& get_results();
 
