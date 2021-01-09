@@ -13,6 +13,12 @@ struct frequency
     int repetitions;
 };
 
+struct repetitions_and_index
+{
+    int repetitions;
+    int index;
+};
+
 class Algorithms
 {
     std::deque<frequency> freq;//struktura danych która pamęta ile razy każdą ze stron użyli
