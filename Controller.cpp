@@ -3,7 +3,7 @@
 
 Controller::Controller(Algorithms &a, File_operation &f):algorithms(a), file(f)
 {
-    last_state = current_state = MENU;
+    current_state = MENU;
     data_option = NOT_CHOSEN;
 }
 
@@ -27,7 +27,6 @@ void Controller::draw()
         std::cin >> temp;
         if (temp < 3 && temp > 0)
         {
-            last_state = current_state;
             current_state = static_cast<State>(temp);
         }
         else
@@ -44,8 +43,9 @@ void Controller::draw()
         std::cin >> temp;
         data_option = static_cast<Data_option>(temp);
         file.data_settings(temp);
+        file.write_tested_data_to_file();
+        algorithms.reserve_space();
     }
-
 
     if (current_state == LRU && data_option == FROM_FILE)
     {
@@ -54,7 +54,7 @@ void Controller::draw()
     }
     if (current_state == LFU && data_option == FROM_FILE)
     {
-        algorithms.LFU_algorithm(file.get_data_storage());
+        algorithms.LFU_MFU_algorithm(file.get_data_storage());
         current_state = WRITE;
     }
     if (current_state == WRITE && data_option == FROM_FILE)

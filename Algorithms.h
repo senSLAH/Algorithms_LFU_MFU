@@ -24,18 +24,20 @@ class Algorithms
     std::deque<frequency> freq;//struktura danych która pamęta ile razy każdą ze stron użyli
     std::vector<std::deque<int>> table;
     std::vector<results_data> results;//struktura do której będziemy wpisyłacz wynniki algorytmów i zatem z niej będziemy zapisyłacz danne do pliku
+    std::vector<Page>& data_storage;
     int number_of_frames;
     int reference_string_length;
     int hit;
     int fault;
 
 public:
-    Algorithms();
+    explicit Algorithms(std::vector<Page>& data);
+    void reserve_space();
     void run_algorithm(State algorithm_type, Data_option option);
-    void LFU_algorithm(std::vector<Page> &arr_of_pages);
+    void LFU_MFU_algorithm(std::vector<Page> &arr_of_pages);
     void LRU_algorithm(std::vector<Page> &arr_of_pages);
     void check_frequency(int num);
-    int minimal_freq(int option = 0);         //if option = 1 function will clear frequency
+    int min_max_freq(int step, char option);         //if step = 1 function will clear frequency
     void show_results();
     std::vector<results_data>& get_results();
 

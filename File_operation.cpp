@@ -10,8 +10,14 @@ File_operation::File_operation()
         std::cerr << strerror(errno) << std::endl;
         abort();
     }
-    output_file.open("../Results.txt");
-    if (!output_file.is_open())
+    output_tested_data_file.open("../Tested_data.txt");
+    if (!output_tested_data_file.is_open())
+    {
+        std::cerr << strerror(errno) << std::endl;
+        abort();
+    }
+    output_results_data_file.open("../Results.txt");
+    if (!output_results_data_file.is_open())
     {
         std::cerr << strerror(errno) << std::endl;
         abort();
@@ -75,14 +81,35 @@ void File_operation::write_results(std::vector<results_data> &results)
 {
     for (int i = 0; i < results.size(); ++i)
     {
-        output_file << "Hit: " << results[i].hit;
-        output_file << "\nFault: " << results[i].fault << "\n";
+        output_results_data_file << "Hit: " << results[i].hit;
+        output_results_data_file << "\nFault: " << results[i].fault << "\n";
     }
 }
 
 File_operation::~File_operation()
 {
     input_file.close();
-    output_file.close();
+    output_results_data_file.close();
     std::cout << "Files successfully closed!\n";
+}
+
+void File_operation::write_tested_data_to_file()
+{
+    if (data_option == 1)
+    {
+        for (auto &i : data_storage)
+        {
+            output_tested_data_file << i.page;
+        }
+    }
+    else if (data_option == 2)
+    {
+        for (int i = 0; i < data_storage_two_measures.size(); ++i)
+        {
+            for (int j = 0; j < data_storage_two_measures[i].size(); ++j)
+            {
+                output_tested_data_file << data_storage_two_measures[i][j].page;
+            }
+        }
+    }
 }

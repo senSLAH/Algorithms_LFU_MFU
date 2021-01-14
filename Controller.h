@@ -13,7 +13,6 @@ class Controller
     Algorithms &algorithms;
     File_operation &file;
     State current_state;
-    State last_state;
     Data_option data_option;
 
 public:

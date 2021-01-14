@@ -3,6 +3,7 @@
 #include "Algorithms.h"
 #include "Controller.h"
 #include "File_operation.h"
+#include "time.h"
 
 
 int main()
@@ -10,7 +11,7 @@ int main()
     srand(time(0));
 
     File_operation file;
-    Algorithms algorithms;
+    Algorithms algorithms(file.get_data_storage());
     Controller ctrl(algorithms,file);
 
 
