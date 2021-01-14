@@ -11,7 +11,7 @@ int main()
     srand(time(0));
 
     File_operation file;
-    Algorithms algorithms(file.get_data_storage());
+    Algorithms algorithms(file.get_data_storage(),file.get_data_storage_two_measures());
     Controller ctrl(algorithms,file);
 
 

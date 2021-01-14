@@ -28,6 +28,7 @@ class File_operation
     std::vector<Page> data_storage;
     std::vector<std::vector<Page>> data_storage_two_measures;
     int data_option;
+    int process;
 
 public:
     File_operation();

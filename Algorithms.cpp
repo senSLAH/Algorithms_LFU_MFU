@@ -1,15 +1,15 @@
 #include "Algorithms.h"
 
-Algorithms::Algorithms(std::vector<Page>& data): data_storage(data)
+Algorithms::Algorithms(std::vector<Page>& data, std::vector<std::vector<Page>>& data_two_measures):
+data_storage(data), data_storage_two_measures(data_two_measures)
 {
-    hit = 0;
-    fault = 0;
 }
 
 
 void Algorithms::LRU_algorithm(std::vector<Page> &arr_of_pages)
 {
-
+    int hit = 0;
+    int fault = 0;
     bool swap = false;
     for (int i = 0; i < reference_string_length; ++i)
     {
@@ -30,7 +30,6 @@ void Algorithms::LRU_algorithm(std::vector<Page> &arr_of_pages)
                 swap = true;
             }
             //w przypadku kiędy jesteśmy na ostatniej ramce i nie znalazliśmy liczby w ramce
-            //??????????????????
             else if (table[i][j] != arr_of_pages[i].page && j == number_of_frames-1)
             {
                 fault += 1;
@@ -70,8 +69,10 @@ void Algorithms::LRU_algorithm(std::vector<Page> &arr_of_pages)
     results.push_back(temp_res);
 }
 
-void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages)
+void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages, char option)
 {
+    int hit = 0;
+    int fault = 0;
     bool swap = false;
     bool delete_element = false;
     for (int i = 0; i < reference_string_length; ++i)
@@ -103,7 +104,7 @@ void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages)
             {
                 int temp = arr_of_pages[i].page;
                 // мы должны удалить нужный елемент
-                table[i].erase(table[i].begin() + min_max_freq(i, '+'));// "-"LFU, +"MFU"
+                table[i].erase(table[i].begin() + min_max_freq(i, option));// "-"LFU, +"MFU"
                 table[i].push_front(temp);
                 swap = false;
                 break;
@@ -122,7 +123,7 @@ void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages)
     results.push_back(temp_res);
 }
 
-// trzeba zwrócicz index elementa z najmniejdzym "repetitions"
+// trzeba zwrócicz index elementa z najmniejdzym "used"
 int Algorithms::min_max_freq(int step, char option)
 {
     if (step < 3)
@@ -135,22 +136,22 @@ int Algorithms::min_max_freq(int step, char option)
         //находим какая у него частота
         for (int j = 0; j < freq.size(); ++j) // итерируемся по всем частотам и нахил частоту для этого числа
         {
-            if (freq[j].num == table[step][i]) //нашли
+            if (freq[j].page == table[step][i]) //нашли
             {
                 repetitions_and_index temp_r;
-                temp_r.repetitions = freq[j].repetitions;  //записываем частоту в перемунную что бы потом сравнить
+                temp_r.used = freq[j].used;  //записываем частоту в перемунную что бы потом сравнить
                 temp_r.index = i;//запоминаем индекс что бы если частота будем наименьшей удалить это число
                 r_i.push_back(temp_r);
                 break;
             }
         }
     }
-    int temp_rep = r_i[0].repetitions;
+    int temp_rep = r_i[0].used;
     if (option == '-')
     {
         for (int j = 0; j < r_i.size()-1; ++j)
         {
-            if (temp_rep >= r_i[j+1].repetitions)
+            if (temp_rep >= r_i[j+1].used)
                 index = j+1;
         }
     }
@@ -158,29 +159,29 @@ int Algorithms::min_max_freq(int step, char option)
     {
         for (int j = 0; j < r_i.size()-1; ++j)
         {
-            if (temp_rep <= r_i[j+1].repetitions)
+            if (temp_rep <= r_i[j+1].used)
                 index = j+1;
         }
     }
     return r_i[index].index;
 }
 
-void Algorithms::check_frequency(int num)
+void Algorithms::check_frequency(int page)
 {
-    //iterujemy się po wszyskim elementam i szukamy liczby "num",
-    //zwiększamy "repetitions" jeżeli znajdujemy i wychodzimy z funkcji
+    //iterujemy się po wszyskim elementam i szukamy liczby "page",
+    //zwiększamy "used" jeżeli znajdujemy i wychodzimy z funkcji
     //jeżeli nie ma takiego elementu - twożymy go
     for (int i = 0; i < freq.size(); ++i)
     {
-        if (freq[i].num == num)
+        if (freq[i].page == page)
         {
-            freq[i].repetitions += 1;
+            freq[i].used += 1;
             return;//
         }
     }
     frequency temp;
-    temp.num = num;
-    temp.repetitions = 1;
+    temp.page = page;
+    temp.used = 1;
     freq.push_front(temp);
 }
 
@@ -198,18 +199,29 @@ std::vector<results_data>& Algorithms::get_results()
     return results;
 }
 
-void Algorithms::reserve_space()
+void Algorithms::reserve_space(int option)
 {
     number_of_frames = 3; //ramki
-    reference_string_length = data_storage.size();
-
+    if (option == 1)
+        reference_string_length = data_storage.size();
+    else
+        reference_string_length = data_storage_two_measures.size();
 
     //wpisuje -1 daltego żeby dalej sprawdacz czy w pirwszy raz kożystamy z tej ramki lub nie
     std::deque<int> temp(number_of_frames,-1);
     for (int i = 0; i < reference_string_length; ++i)
-    {
         table.push_back(temp);
-    }
+}
+
+void Algorithms::LRU_algorithm(std::vector<std::vector<Page>> &arr_of_pages)
+{
+    for (int i = 0; i < arr_of_pages.size(); ++i)
+        LRU_algorithm(arr_of_pages[i]);
+}
+void Algorithms::LFU_MFU_algorithm(std::vector<std::vector<Page>> &arr_of_pages, char option)
+{
+    for (int i = 0; i < arr_of_pages.size(); ++i)
+        LFU_MFU_algorithm(arr_of_pages[i],option);
 }
 
 
