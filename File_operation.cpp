@@ -60,13 +60,29 @@ void File_operation::read_file()
     {
         save_value = "";
 
-        if (data_form_file[i] != ' ')
+        while (i < data_form_file.size())
         {
+            if (data_form_file[i] == ' ' || data_form_file[i] == '\n')
+                break;
             save_value += data_form_file[i];
-            temp.page = stoi(save_value);
-            temp.used = 0;
-            data_storage.push_back(temp);
+            ++i;
         }
+        temp.page = stoi(save_value);
+        temp.used = 0;
+        data_storage.push_back(temp);
+    }
+    if (data_storage.size() == 10000)
+    {
+        int element = 0;
+        for (int i = 0; i < 100; ++i)
+        {
+            for (int j = 0; j < 100; ++j)
+            {
+                data_storage_two_measures[i][j] = data_storage[element];
+                ++element;
+            }
+        }
+        data_option = 2;//przypisujemy wartość dwa, bo będziemy stosować dwuwymiarowy vector
     }
 }
 
@@ -92,8 +108,8 @@ void File_operation::write_results(std::vector<results_data> &results)
 {
     for (int i = 0; i < results.size(); ++i)
     {
-        output_results_data_file << "Hit: " << results[i].hit;
-        output_results_data_file << "\nFault: " << results[i].fault << "\n";
+        output_results_data_file << results[i].hit << "\n";
+        output_results_data_file << results[i].fault << "\n";
     }
 }
 
@@ -101,7 +117,7 @@ void File_operation::write_tested_data_to_file()
 {
     if (data_option == 1)
         for (auto &i : data_storage)
-            output_tested_data_file << i.page;
+            output_tested_data_file << i.page << " ";
     else
         for (int i = 0; i < data_storage_two_measures.size(); ++i)
             for (int j = 0; j < data_storage_two_measures[i].size(); ++j)
@@ -119,4 +135,9 @@ File_operation::~File_operation()
     input_file.close();
     output_results_data_file.close();
     std::cout << "Files successfully closed!\n";
+}
+
+int File_operation::get_data_option()
+{
+    return data_option;
 }

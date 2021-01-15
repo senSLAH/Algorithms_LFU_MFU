@@ -35,7 +35,6 @@ void Algorithms::LRU_algorithm(std::vector<Page> &arr_of_pages)
                 fault += 1;
                 swap = true;
             }
-
             if (swap)
             {
                 int temp = arr_of_pages[i].page;
@@ -71,6 +70,7 @@ void Algorithms::LRU_algorithm(std::vector<Page> &arr_of_pages)
 
 void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages, char option)
 {
+    int free_element_of_frame = number_of_frames;
     int hit = 0;
     int fault = 0;
     bool swap = false;
@@ -104,8 +104,9 @@ void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages, char option)
             {
                 int temp = arr_of_pages[i].page;
                 // мы должны удалить нужный елемент
-                table[i].erase(table[i].begin() + min_max_freq(i, option));// "-"LFU, +"MFU"
+                table[i].erase(table[i].begin() + min_max_freq(i,free_element_of_frame, option));// "-"LFU, +"MFU"
                 table[i].push_front(temp);
+                free_element_of_frame -= 1;
                 swap = false;
                 break;
             }
@@ -116,7 +117,6 @@ void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages, char option)
                 table[i+1][j] = table[i][j];
         }
     }
-    std::cout << "LFU\nFault: " << fault << "\tHit: " << hit << "\n";
     results_data temp_res;
     temp_res.fault = fault;
     temp_res.hit = hit;
@@ -124,10 +124,11 @@ void Algorithms::LFU_MFU_algorithm(std::vector<Page> &arr_of_pages, char option)
 }
 
 // trzeba zwrócicz index elementa z najmniejdzym "used"
-int Algorithms::min_max_freq(int step, char option)
+int Algorithms::min_max_freq(int step, int free_element_of_frame, char option)
 {
-    if (step < 3)
+    if (free_element_of_frame > 0)
         return step;
+
 
     std:: vector<repetitions_and_index> r_i;
     int index = 0;
@@ -152,7 +153,10 @@ int Algorithms::min_max_freq(int step, char option)
         for (int j = 0; j < r_i.size()-1; ++j)
         {
             if (temp_rep >= r_i[j+1].used)
+            {
                 index = j+1;
+                temp_rep = r_i[index].used;
+            }
         }
     }
     else
@@ -160,7 +164,10 @@ int Algorithms::min_max_freq(int step, char option)
         for (int j = 0; j < r_i.size()-1; ++j)
         {
             if (temp_rep <= r_i[j+1].used)
+            {
                 index = j+1;
+                temp_rep = r_i[index].used;
+            }
         }
     }
     return r_i[index].index;
@@ -201,7 +208,7 @@ std::vector<results_data>& Algorithms::get_results()
 
 void Algorithms::reserve_space(int option)
 {
-    number_of_frames = 3; //ramki
+    number_of_frames = 5; //ramki
     if (option == 1)
         reference_string_length = data_storage.size();
     else

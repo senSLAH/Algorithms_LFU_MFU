@@ -40,8 +40,8 @@ void Controller::draw()
         std::cout << "Chose option:\n";
 
         std::cin >> temp;
-        data_option = static_cast<Data_option>(temp);
-        file.data_settings(temp);
+        file.data_settings(temp);//może zmienicz data_option jeżeli
+        data_option = static_cast<Data_option>(file.get_data_option());
         file.write_tested_data_to_file();
         algorithms.reserve_space(data_option);
     }

@@ -39,6 +39,7 @@ public:
     void generate_100_sets_of_100_elements();
     std::vector<Page>& get_data_storage();
     std::vector<std::vector<Page>>& get_data_storage_two_measures();
+    int get_data_option();
     void draw_processes() const;
     void write_to_file(std::vector<std::vector<float>> res);
     ~File_operation();

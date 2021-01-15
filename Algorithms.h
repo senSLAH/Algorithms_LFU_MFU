@@ -44,7 +44,7 @@ public:
     //znajduje się w tej strukruże lub nie
     //1) jeżeli znajduje się -> zwiększa licznik
 
-    int min_max_freq(int step, char option);
+    int min_max_freq(int step, int free_element_of_frame, char option);
     //zwraca indeks strony o najmniejszej lub najwyższej
     //liczbie powtórzeń, to zależy od parametru option.
     //"option" - może przyjmować parametry "-" lub "+".
