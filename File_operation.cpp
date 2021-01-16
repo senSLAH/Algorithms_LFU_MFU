@@ -40,19 +40,17 @@ void File_operation::data_settings(int option)
     if (option == 1)
         read_file();
     if (option == 2)
-    {
         generate_100_sets_of_100_elements();
-    }
 }
 
 void File_operation::read_file()
 {
     char ch;
-    std::string data_form_file;
-    std::string save_value;
+    std::string data_form_file;//dla zapisania czałej zawartości plika
+    std::string save_value;//będziemy zapisyłacz to tej zmiennej liczby z plika do póki nie ma spacji lub koniec linii
     Page temp;
 
-    // zapisujemy cało zawartość plika do data_form_file
+    // zapisujemy całą zawartość plika do data_form_file
     while (input_file.get(ch))
         data_form_file += ch;
 
@@ -71,6 +69,9 @@ void File_operation::read_file()
         temp.used = 0;
         data_storage.push_back(temp);
     }
+    //jeżeli rozmiar jest równy 10 000, to znaczy że chcę zbadacz
+    //algorytm na na stu różnych ciągach(każdy z ciągów zawiera 100 odwołań).
+    //w takiem razie potzebujemy dwuwymiarowego wektora
     if (data_storage.size() == 10000)
     {
         int element = 0;
@@ -108,8 +109,8 @@ void File_operation::write_results(std::vector<results_data> &results)
 {
     for (int i = 0; i < results.size(); ++i)
     {
-        output_results_data_file << results[i].hit << "\n";
-        output_results_data_file << results[i].fault << "\n";
+        output_results_data_file << "Hit:" << results[i].hit << " ";
+        output_results_data_file << "Fault:" << results[i].fault << "\n";
     }
 }
 
@@ -134,6 +135,7 @@ File_operation::~File_operation()
 {
     input_file.close();
     output_results_data_file.close();
+    output_tested_data_file.close();
     std::cout << "Files successfully closed!\n";
 }
 

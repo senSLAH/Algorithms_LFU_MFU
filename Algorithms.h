@@ -4,8 +4,8 @@
 #include <deque>
 #include "File_operation.h"
 
-enum State : int {MENU = 0 , LRU = 1, LFU, MFU, WRITE ,STOP};
-enum Data_option : int {NOT_CHOSEN = 0, FROM_FILE = 1, _100_sets_of_100_elements = 2 };
+enum State : int {MENU = 0 , LRU = 1, LFU, MFU, WRITE ,STOP};//stan programu
+enum Data_option : int {NOT_CHOSEN = 0, FROM_FILE = 1, _100_sets_of_100_elements = 2 };//opcji pobierania danych
 
 struct frequency
 {
@@ -40,21 +40,23 @@ public:
 
     void check_frequency(int page);
     //Zarządza strukturą danych "std::deque<frequency> freq"
-    //"page" - przyjmuje numer, dalej funkcja sprawdza czy ten numer
-    //znajduje się w tej strukruże lub nie
-    //1) jeżeli znajduje się -> zwiększa licznik
+    //"page" - przyjmuje strone, dalej funkcja sprawdza czy strona
+    //znajduje się w tej strukruże która przechowuje struktura danych która
+    //pamęta ile razy każdą ze stron użyli lub nie
+    //1)jeżeli znajduje się -> zwiększa licznik
+    //2)tworzy nowy obiekt w "freq" i przypisuje wartość
 
     int min_max_freq(int step, int free_element_of_frame, char option);
     //zwraca indeks strony o najmniejszej lub najwyższej
     //liczbie powtórzeń, to zależy od parametru option.
     //"option" - może przyjmować parametry "-" lub "+".
-    //1) "-": zwraca index strony o najmniejszej liczbie powtórzeń
-    //2) "+": zwraca index strony o największej liczbie powtórzeń
+    //1) "-": zwraca index strony o najmniejszej liczbie powtórzeń(dla LFU)
+    //2) "+": zwraca index strony o największej liczbie powtórzeń(dla MFU)
 
     void reserve_space(int option);
-    //
+    //Ustawia liczbę ramek i długość cąga odłowań
+    //wpisuje -1 do tablicy daltego żeby dalej sprawdacz czy w poraz pierwszy raz kożystamy z elementu w ramce
 
-    void show_results();
     std::vector<results_data>& get_results();
 
 };
