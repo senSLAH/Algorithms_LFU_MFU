@@ -109,7 +109,7 @@ void File_operation::write_results(std::vector<results_data> &results)
 {
     for (int i = 0; i < results.size(); ++i)
     {
-        output_results_data_file << "Hit:" << results[i].hit << " ";
+        output_results_data_file << "Hit:" << results[i].hit << "  ";
         output_results_data_file << "Fault:" << results[i].fault << "\n";
     }
 }
@@ -131,6 +131,11 @@ std::vector<std::vector<Page>> &File_operation::get_data_storage_two_measures()
     return data_storage_two_measures;
 }
 
+int File_operation::get_data_option()
+{
+    return data_option;
+}
+
 File_operation::~File_operation()
 {
     input_file.close();
@@ -139,7 +144,3 @@ File_operation::~File_operation()
     std::cout << "Files successfully closed!\n";
 }
 
-int File_operation::get_data_option()
-{
-    return data_option;
-}
